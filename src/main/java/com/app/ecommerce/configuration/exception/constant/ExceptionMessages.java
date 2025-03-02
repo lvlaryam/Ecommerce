@@ -10,9 +10,11 @@ public enum ExceptionMessages {
     USER_NOT_FOUND("User not found", HttpStatus.NOT_FOUND),
     NOT_FOUND("Not found", HttpStatus.NOT_FOUND ),
     PRODUCT_EXIST("Product is already exist", HttpStatus.CONFLICT ),
+    PENDING_ORDER_EXIST("One pending order is already exist", HttpStatus.CONFLICT ),
     USER_EXIST("User is already exist with this email", HttpStatus.CONFLICT ),
     ACCESS_DENIED("Access denied", HttpStatus.FORBIDDEN),
     INVALID_CODE("Invalid code", HttpStatus.BAD_REQUEST ),
+    NOT_ALLOWED("Action not allowed", HttpStatus.BAD_REQUEST ),
 
     ;
 

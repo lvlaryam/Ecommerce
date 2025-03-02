@@ -1,4 +1,4 @@
-package com.app.ecommerce.core.product.dto;
+package com.app.ecommerce.core.item.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,8 +11,7 @@ import java.io.Serializable;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductResponse implements Serializable {
-    private Long id;
-    private String name;
-    private Double price;
+public class OrderItemRequest implements Serializable {
+    private Integer quantity;
+    private Long productId;
 }

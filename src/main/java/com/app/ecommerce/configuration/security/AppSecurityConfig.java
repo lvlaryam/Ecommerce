@@ -5,7 +5,6 @@ import com.app.ecommerce.configuration.security.jwt.JwtService;
 import com.app.ecommerce.configuration.security.jwt.filter.JwtTokenValidatorFilter;
 import com.app.ecommerce.core.user.UserRepository;
 import com.app.ecommerce.core.user.utils.UserRole;
-import com.app.ecommerce.core.userToken.UserTokenRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -41,9 +40,6 @@ public class AppSecurityConfig {
     private static final String ROLE_ADMIN = UserRole.ADMIN.name();
     private final JwtService jwtService;
     private final UserRepository userRepository;
-    private final UserTokenRepository userTokenRepository;
-    private final CustomUserDetailsService userDetailsService;
-    public HashUtil hashUtil = new HashUtil();
 
     @Bean
     public RestTemplate restTemplate() {
@@ -74,7 +70,7 @@ public class AppSecurityConfig {
                 .csrf(
                         AbstractHttpConfigurer::disable
                 )
-                .addFilterBefore(new JwtTokenValidatorFilter(jwtService, userRepository, userTokenRepository, hashUtil), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JwtTokenValidatorFilter(jwtService, userRepository), UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(
                         requests -> requests
                                 .requestMatchers("/v2/api-docs").permitAll()

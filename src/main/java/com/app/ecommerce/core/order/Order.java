@@ -29,12 +29,12 @@ public class Order {
 
     @ManyToOne
     @JoinColumn(name = "customer_id")
-    private User customer;
+    private User customer; //lazy
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
-    @OneToMany(mappedBy = "order", orphanRemoval = true)
+    @OneToMany(mappedBy = "order", orphanRemoval = true) //lazy
     private List<OrderItem> orderItems = new ArrayList<>();
 
 }

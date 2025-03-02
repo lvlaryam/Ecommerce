@@ -1,14 +1,11 @@
 package com.app.ecommerce.configuration.security.jwt.filter;
 
 
-import com.app.ecommerce.configuration.security.HashUtil;
 import com.app.ecommerce.configuration.security.UserPrincipal;
 import com.app.ecommerce.configuration.security.constant.SecurityConstants;
 import com.app.ecommerce.configuration.security.jwt.JwtService;
 import com.app.ecommerce.core.user.User;
 import com.app.ecommerce.core.user.UserRepository;
-import com.app.ecommerce.core.user.utils.UserRole;
-import com.app.ecommerce.core.userToken.UserTokenRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.security.Keys;
@@ -33,9 +30,6 @@ import java.util.Optional;
 public class JwtTokenValidatorFilter extends OncePerRequestFilter {
     public JwtService jwtService;
     public UserRepository userRepository;
-    public UserTokenRepository userTokenRepository;
-    public HashUtil hashUtil = new HashUtil();
-
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
@@ -53,14 +47,13 @@ public class JwtTokenValidatorFilter extends OncePerRequestFilter {
 
         try {
             Claims claims = jwtService.getClaimsFromToken(token, key);
-            String username = (String) claims.get("username");
+            String username = (String) claims.get("email");
             String authorities = (String) claims.get("authorities");
 
             if (username != null && authorities != null) {
                 Optional<User> user = userRepository.findByEmail(username);
 
                 if (user.isPresent()) {
-                    if (userTokenRepository.findByAccessTokenAndUserRoleAndUser(hashUtil.hashToken(token), UserRole.valueOf(authorities),user.get()) != null ) {
                         UserPrincipal userPrincipal = new UserPrincipal(user.get());
 
                         UsernamePasswordAuthenticationToken authentication =
@@ -68,11 +61,6 @@ public class JwtTokenValidatorFilter extends OncePerRequestFilter {
 
                         authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                         SecurityContextHolder.getContext().setAuthentication(authentication);
-                    } else {
-                        response.setStatus(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
-                        response.getWriter().write("Access token is not allowed");
-                        return;
-                    }
                 } else {
                     response.setStatus(HttpServletResponse.SC_NOT_FOUND);
                     response.getWriter().write("Access token is unauthorized");

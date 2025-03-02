@@ -21,12 +21,10 @@ import java.util.logging.Logger;
 public class JwtService {
 
     Logger logger = Logger.getLogger(this.getClass().getName());
-
-
     private String generateToken(Map<String, Object> claims, String subject, SecretKey key, Long expirationDuration) {
 
         return Jwts.builder()
-                .setIssuer("soberDriver")
+                .setIssuer("ecommerce")
                 .setSubject(subject)
                 .setClaims(claims)
                 .setIssuedAt(new Date())
@@ -46,6 +44,7 @@ public class JwtService {
 
     public Map<String, Object> generateClaims(User user, UserRole userRole) {
         Map<String, Object> claims = new HashMap<>();
+        claims.put("email", user.getEmail());
         claims.put("authorities", userRole);
         return claims;
     }
@@ -61,7 +60,7 @@ public class JwtService {
     public String userNameFromToken(String token) {
         SecretKey key = Keys.hmacShaKeyFor(SecurityConstants.ACCESS_KEY.getBytes(StandardCharsets.UTF_8));
         Claims claims = getClaimsFromToken(token, key);
-        return (String) claims.get("username");
+        return (String) claims.get("email");
     }
 
     public String authoritiesFromToken(String accessToken) {
