@@ -9,6 +9,8 @@ public enum ExceptionMessages {
     INVALID_REFRESH_TOKEN("Invalid Refresh token", HttpStatus.UNAUTHORIZED),
     USER_NOT_FOUND("User not found", HttpStatus.NOT_FOUND),
     NOT_FOUND("Not found", HttpStatus.NOT_FOUND ),
+    PRODUCT_EXIST("Product is already exist", HttpStatus.CONFLICT ),
+    USER_EXIST("User is already exist with this email", HttpStatus.CONFLICT ),
     ACCESS_DENIED("Access denied", HttpStatus.FORBIDDEN),
     INVALID_CODE("Invalid code", HttpStatus.BAD_REQUEST ),
 

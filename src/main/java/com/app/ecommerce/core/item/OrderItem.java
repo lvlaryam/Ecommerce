@@ -1,5 +1,7 @@
 package com.app.ecommerce.core.item;
 
+import com.app.ecommerce.core.order.Order;
+import com.app.ecommerce.core.product.Product;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -20,7 +22,12 @@ public class OrderItem {
     @Column(name = "quantity")
     private Integer quantity;
 
-    @Column(name = "price")
-    private Double price;
+    @ManyToOne
+    @JoinColumn(name = "product_id")
+    private Product product;
+
+    @ManyToOne
+    @JoinColumn(name = "order_is_id")
+    private Order order;
 
 }
