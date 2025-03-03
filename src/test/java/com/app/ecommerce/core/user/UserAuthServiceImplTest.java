@@ -86,7 +86,7 @@ class UserAuthServiceImplTest {
         when(redisTemplate.opsForValue()).thenReturn(valueOperations);
         when(valueOperations.get(anyString())).thenReturn(registerRequest);
         when(userRepository.save(any(User.class))).thenReturn(user);
-        when(jwtService.generateClaims(any(User.class), any())).thenReturn(Map.of());
+        when(jwtService.generateClaims(any(User.class))).thenReturn(Map.of());
         when(jwtService.generateAccessToken(anyMap())).thenReturn("access-token");
         when(jwtService.generateRefreshToken(anyMap())).thenReturn("refresh-token");
 
@@ -108,7 +108,7 @@ class UserAuthServiceImplTest {
     @Test
     void login_ShouldReturnResponse_WhenCodeIsValid() {
         when(userRepository.findByEmail("test@example.com")).thenReturn(Optional.of(user));
-        when(jwtService.generateClaims(any(User.class), any())).thenReturn(Map.of());
+        when(jwtService.generateClaims(any(User.class))).thenReturn(Map.of());
         when(jwtService.generateAccessToken(anyMap())).thenReturn("access-token");
         when(jwtService.generateRefreshToken(anyMap())).thenReturn("refresh-token");
 

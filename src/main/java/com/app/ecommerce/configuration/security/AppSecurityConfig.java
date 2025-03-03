@@ -73,18 +73,17 @@ public class AppSecurityConfig {
                 .addFilterBefore(new JwtTokenValidatorFilter(jwtService, userRepository), UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(
                         requests -> requests
-//                                .requestMatchers("/orderItem").hasAnyRole(ROLE_CUSTOMER)
-//                                .requestMatchers("/order").hasAnyRole(ROLE_CUSTOMER)
-//                                .requestMatchers("/product/get").hasAnyRole(ROLE_CUSTOMER)
-//                                .requestMatchers("/product/").hasAnyRole(ROLE_ADMIN)
+                                .requestMatchers("/orderItem").hasAnyAuthority(ROLE_CUSTOMER)
+                                .requestMatchers("/order").hasAnyAuthority(ROLE_CUSTOMER)
+                                .requestMatchers("/product/get").hasAnyAuthority(ROLE_CUSTOMER)
+                                .requestMatchers("/product/").hasAnyAuthority(ROLE_ADMIN)
                                 .requestMatchers("/auth/**").permitAll()
                                 .requestMatchers("/v2/api-docs").permitAll()
                                 .requestMatchers("/swagger-resources/**").permitAll()
                                 .requestMatchers("/swagger-ui/**").permitAll()
                                 .requestMatchers("/swagger-ui.html").permitAll()
                                 .requestMatchers("/v3/api-docs/**").permitAll()
-                                .anyRequest().permitAll()
-
+                                .anyRequest().authenticated()
                 )
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)

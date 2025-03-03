@@ -66,7 +66,7 @@ public class UserAuthServiceImpl implements UserAuthService {
     }
 
     private RegisterResponse provideCredential(User user) {
-        Map<String, Object> claims = jwtService.generateClaims(user, UserRole.CUSTOMER);
+        Map<String, Object> claims = jwtService.generateClaims(user);
         String accessToken = jwtService.generateAccessToken(claims);
         String refreshToken = jwtService.generateRefreshToken(claims);
 

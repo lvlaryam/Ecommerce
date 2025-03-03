@@ -42,10 +42,10 @@ public class JwtService {
         return generateToken(claims, "refreshToken", key, SecurityConstants.REFRESH_TOKEN_DURATION);
     }
 
-    public Map<String, Object> generateClaims(User user, UserRole userRole) {
+    public Map<String, Object> generateClaims(User user) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("email", user.getEmail());
-        claims.put("authorities", userRole);
+        claims.put("authorities", user.getUserRole());
         return claims;
     }
 
