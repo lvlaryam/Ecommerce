@@ -18,7 +18,7 @@ public class AppExceptionHandler {
     @ExceptionHandler(value = {SystemServiceException.class})
     public ResponseEntity<String> handleRelayServiceException(SystemServiceException systemServiceException) {
         logger.log(Level.WARNING, "SystemServiceException had just happened, {0}", systemServiceException.getMessage());
-        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(systemServiceException.getMessage(), systemServiceException.getStatus());
     }
 
     @ExceptionHandler(value = {AuthenticationException.class})

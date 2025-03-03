@@ -8,25 +8,17 @@ import com.app.ecommerce.core.order.OrderRepository;
 import com.app.ecommerce.core.order.utils.OrderStatus;
 import com.app.ecommerce.core.product.ProductRepository;
 import com.app.ecommerce.core.user.User;
-import com.app.ecommerce.core.user.UserRepository;
-import org.modelmapper.ModelMapper;
-import org.springframework.data.redis.core.RedisTemplate;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 
 @Service
+@RequiredArgsConstructor
 public class OrderItemServiceImpl implements OrderItemService {
 
     private final OrderRepository orderRepository;
     private final ProductRepository productRepository;
     private final OrderItemRepository orderItemRepository;
-
-
-    public OrderItemServiceImpl(RedisTemplate<String, Object> redisTemplate, ModelMapper modelMapper, UserRepository userRepository, OrderRepository orderRepository, ProductRepository productRepository, OrderItemRepository orderItemRepository) {
-        this.orderRepository = orderRepository;
-        this.productRepository = productRepository;
-        this.orderItemRepository = orderItemRepository;
-    }
 
     @Override
     public void addOrderItem(OrderItemRequest orderItemRequest, User customer, Long orderId){
@@ -40,5 +32,4 @@ public class OrderItemServiceImpl implements OrderItemService {
                 .build();
         orderItemRepository.save(orderItem);
     }
-
 }

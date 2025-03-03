@@ -7,6 +7,5 @@ import java.util.List;
 
 public interface ProductService {
     void addProduct(ProductRequest request);
-
     List<ProductResponse> getProducts();
 }

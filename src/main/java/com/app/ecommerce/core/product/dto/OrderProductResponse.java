@@ -12,7 +12,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 public class OrderProductResponse implements Serializable {
-    private Integer quantity;
     private String productName;
     private Double productPrice;
+    private Integer quantity;
 }

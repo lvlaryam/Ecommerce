@@ -73,6 +73,11 @@ public class AppSecurityConfig {
                 .addFilterBefore(new JwtTokenValidatorFilter(jwtService, userRepository), UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(
                         requests -> requests
+//                                .requestMatchers("/orderItem").hasAnyRole(ROLE_CUSTOMER)
+//                                .requestMatchers("/order").hasAnyRole(ROLE_CUSTOMER)
+//                                .requestMatchers("/product/get").hasAnyRole(ROLE_CUSTOMER)
+//                                .requestMatchers("/product/").hasAnyRole(ROLE_ADMIN)
+                                .requestMatchers("/auth/**").permitAll()
                                 .requestMatchers("/v2/api-docs").permitAll()
                                 .requestMatchers("/swagger-resources/**").permitAll()
                                 .requestMatchers("/swagger-ui/**").permitAll()

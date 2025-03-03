@@ -8,9 +8,9 @@ import java.util.List;
 
 public interface OrderService {
 
-    OrderResponse createOrder(User customer);
+    OrdersResponse createOrder(User customer);
 
-    void changeOrderStatus(User customer, Long orderId);
+    OrdersResponse changeOrderStatus(User customer, Long orderId);
 
     OrderResponse getOrder(User customer, Long orderId);
 

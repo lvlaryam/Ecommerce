@@ -36,5 +36,4 @@ public class Order {
 
     @OneToMany(mappedBy = "order", orphanRemoval = true) //lazy
     private List<OrderItem> orderItems = new ArrayList<>();
-
 }

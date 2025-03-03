@@ -2,6 +2,7 @@ package com.app.ecommerce.core.user;
 
 import com.app.ecommerce.core.user.utils.UserRole;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import lombok.*;
 
 @Entity
@@ -21,10 +22,10 @@ public class User {
     private String fullname;
 
     @Column(name = "email", nullable = false,length = 320, unique = true)
+    @Email
     private String email;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "user_role")
     private UserRole userRole;
-
 }

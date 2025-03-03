@@ -13,7 +13,7 @@ import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
-public class UserServiceImpl implements UserService {
+public class UserAuthAuthServiceImpl implements UserAuthService {
 
     private final UserRepository userRepository;
     private final JwtService jwtService;
@@ -43,7 +43,6 @@ public class UserServiceImpl implements UserService {
         throw new SystemServiceException(ExceptionMessages.INVALID_CODE);
     }
 
-
     private RegisterResponse provideCredential(User user) {
         Map<String, Object> claims = jwtService.generateClaims(user, UserRole.CUSTOMER);
         String accessToken = jwtService.generateAccessToken(claims);
@@ -55,8 +54,6 @@ public class UserServiceImpl implements UserService {
                 .refreshToken(refreshToken)
                 .build();
     }
-
-
 }
 
 

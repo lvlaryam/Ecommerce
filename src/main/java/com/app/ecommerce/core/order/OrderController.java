@@ -6,7 +6,6 @@ import com.app.ecommerce.core.order.utils.OrdersResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +21,7 @@ public class OrderController {
 
     @Operation(summary = "create an empty order ")
     @PostMapping
-    public ResponseEntity<OrderResponse> createOrder(
+    public ResponseEntity<OrdersResponse> createOrder(
             @AuthenticationPrincipal UserPrincipal userPrincipal
     ) {
         return ResponseEntity.ok(orderService.createOrder(userPrincipal.getUser()));
@@ -30,12 +29,11 @@ public class OrderController {
 
     @Operation(summary = "change order status to shipped ")
     @PostMapping("/{orderId}")
-    public ResponseEntity<HttpStatus> changeOrderStatus(
+    public ResponseEntity<OrdersResponse> changeOrderStatus(
             @AuthenticationPrincipal UserPrincipal userPrincipal,
             @PathVariable Long orderId
             ) {
-        orderService.changeOrderStatus(userPrincipal.getUser(), orderId);
-        return ResponseEntity.ok(HttpStatus.OK);
+        return ResponseEntity.ok(orderService.changeOrderStatus(userPrincipal.getUser(), orderId));
     }
 
     @Operation(summary = "get an order by id ")

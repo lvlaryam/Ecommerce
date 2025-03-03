@@ -3,6 +3,7 @@ package com.app.ecommerce.core.product;
 import com.app.ecommerce.configuration.security.UserPrincipal;
 import com.app.ecommerce.core.product.dto.ProductRequest;
 import com.app.ecommerce.core.product.dto.ProductResponse;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,6 +20,7 @@ import java.util.List;
 public class ProductController {
     private final ProductService productService;
 
+    @Operation(summary = "add product")
     @PostMapping
     public ResponseEntity<HttpStatus> addProduct(
             @AuthenticationPrincipal UserPrincipal userPrincipal,
@@ -28,7 +30,8 @@ public class ProductController {
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
-    @GetMapping
+    @Operation(summary = "get all products")
+    @GetMapping("/get")
     public ResponseEntity<List<ProductResponse>> getProduct(
             @AuthenticationPrincipal UserPrincipal userPrincipal
     ) {
