@@ -113,7 +113,6 @@ class UserAuthServiceImplTest {
         when(jwtService.generateRefreshToken(anyMap())).thenReturn("refresh-token");
 
         RegisterResponse response = userAuthService.login("test@example.com", "55555");
-
         assertNotNull(response);
         assertEquals("access-token", response.getAccessToken());
         assertEquals("refresh-token", response.getRefreshToken());

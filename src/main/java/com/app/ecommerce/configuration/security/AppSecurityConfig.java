@@ -75,8 +75,8 @@ public class AppSecurityConfig {
                         requests -> requests
                                 .requestMatchers("/orderItem").hasAnyAuthority(ROLE_CUSTOMER)
                                 .requestMatchers("/order").hasAnyAuthority(ROLE_CUSTOMER)
-                                .requestMatchers("/product/get").hasAnyAuthority(ROLE_CUSTOMER)
-                                .requestMatchers("/product/").hasAnyAuthority(ROLE_ADMIN)
+                                .requestMatchers("/product/get").hasAnyAuthority(ROLE_CUSTOMER,ROLE_ADMIN)
+                                .requestMatchers("/product/get").hasAnyAuthority(ROLE_ADMIN)
                                 .requestMatchers("/auth/**").permitAll()
                                 .requestMatchers("/v2/api-docs").permitAll()
                                 .requestMatchers("/swagger-resources/**").permitAll()
