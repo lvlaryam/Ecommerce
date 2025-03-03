@@ -5,5 +5,5 @@ import com.app.ecommerce.core.user.User;
 
 public interface OrderItemService {
 
-    void addOrderItem(OrderItemRequest orderItemRequest, User customer, Long orderId);
+    void addOrderItem(OrderItemRequest orderItemRequest, User customer);
 }

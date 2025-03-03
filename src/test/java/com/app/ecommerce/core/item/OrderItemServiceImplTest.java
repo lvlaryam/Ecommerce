@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import com.app.ecommerce.configuration.exception.SystemServiceException;
+import com.app.ecommerce.configuration.exception.constant.ExceptionMessages;
 import com.app.ecommerce.core.item.dto.OrderItemRequest;
 import com.app.ecommerce.core.order.Order;
 import com.app.ecommerce.core.order.OrderRepository;
@@ -18,7 +19,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @ExtendWith(MockitoExtension.class)
@@ -56,7 +56,7 @@ class OrderItemServiceImplTest {
                 .thenReturn(Optional.of(order));
         when(productRepository.findById(1L)).thenReturn(Optional.of(product));
 
-        assertDoesNotThrow(() -> orderItemService.addOrderItem(orderItemRequest, customer, 1L));
+        assertDoesNotThrow(() -> orderItemService.addOrderItem(orderItemRequest, customer));
 
         verify(orderItemRepository, times(1)).save(any(OrderItem.class));
     }
@@ -67,7 +67,7 @@ class OrderItemServiceImplTest {
                 .thenReturn(Optional.empty());
 
         assertThrows(SystemServiceException.class,
-                () -> orderItemService.addOrderItem(orderItemRequest, customer, 1L));
+                () -> orderItemService.addOrderItem(orderItemRequest, customer));
     }
 
     @Test
@@ -76,8 +76,10 @@ class OrderItemServiceImplTest {
                 .thenReturn(Optional.of(order));
         when(productRepository.findById(1L)).thenReturn(Optional.empty());
 
-        assertThrows(NoSuchElementException.class,
-                () -> orderItemService.addOrderItem(orderItemRequest, customer, 1L));
+        SystemServiceException exception = assertThrows(SystemServiceException.class,
+                () -> orderItemService.addOrderItem(orderItemRequest, customer));
+
+        assertEquals(ExceptionMessages.PRODUCT_NOT_FOUND.getMessage(), exception.getMessage());
     }
 }
 

@@ -7,30 +7,52 @@ import com.app.ecommerce.core.user.dto.RegisterRequest;
 import com.app.ecommerce.core.user.dto.RegisterResponse;
 import com.app.ecommerce.core.user.utils.UserRole;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
 import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
-public class UserAuthAuthServiceImpl implements UserAuthService {
+public class UserAuthServiceImpl implements UserAuthService {
 
     private final UserRepository userRepository;
     private final JwtService jwtService;
+    private final RedisTemplate<String, Object> redisTemplate;
+    private static final String REDIS_AUTH_KEY_PREFIX = "auth:";
 
     @Override
-    public RegisterResponse register(RegisterRequest registerRequest) {
+    public void register(RegisterRequest registerRequest) {
         userRepository.findByEmail(registerRequest.getEmail()).ifPresent(user ->{
             throw new SystemServiceException(ExceptionMessages.USER_EXIST);
         });
 
-        var newUser = new User();
-        newUser.setEmail(registerRequest.getEmail());
-        newUser.setFullname(registerRequest.getFullName());
-        newUser.setUserRole(UserRole.CUSTOMER);
-        userRepository.save(newUser);
-        return provideCredential(newUser);
+        redisTemplate.opsForValue().set(REDIS_AUTH_KEY_PREFIX + ":" + registerRequest.getEmail(), registerRequest, Duration.ofMinutes(2));
         }
+
+    @Override
+    public RegisterResponse verifyCode( String code, String email) {
+        if (code.equals("55555")) { //just for simplicity
+
+            String redisKey = REDIS_AUTH_KEY_PREFIX + ":" + email;
+            RegisterRequest registerRequest = (RegisterRequest) redisTemplate.opsForValue().get(redisKey);
+
+            if (registerRequest == null) {
+                throw new SystemServiceException(ExceptionMessages.NOT_FOUND);
+            }
+
+            var newUser = new User();
+            newUser.setEmail(registerRequest.getEmail());
+            newUser.setFullname(registerRequest.getFullName());
+            newUser.setUserRole(UserRole.CUSTOMER);
+            userRepository.save(newUser);
+            redisTemplate.delete(redisKey);
+
+            return provideCredential(newUser);
+        }
+        throw new SystemServiceException(ExceptionMessages.INVALID_CODE);
+    }
 
     @Override
     public RegisterResponse login(String email, String code) {

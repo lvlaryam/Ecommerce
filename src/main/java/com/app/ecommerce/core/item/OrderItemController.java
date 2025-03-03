@@ -20,13 +20,12 @@ public class OrderItemController {
     private final OrderItemService orderItemService;
 
     @Operation(summary = "add an item to order")
-    @PostMapping("/{orderId}")
+    @PostMapping
     public ResponseEntity<HttpStatus> addOrderItem(
             @AuthenticationPrincipal UserPrincipal userPrincipal,
-            @RequestBody OrderItemRequest orderItemRequest,
-            @PathVariable Long orderId
+            @RequestBody OrderItemRequest orderItemRequest
             ) {
-        orderItemService.addOrderItem(orderItemRequest, userPrincipal.getUser(),orderId);
+        orderItemService.addOrderItem(orderItemRequest, userPrincipal.getUser());
         return ResponseEntity.ok(HttpStatus.OK);
     }
 

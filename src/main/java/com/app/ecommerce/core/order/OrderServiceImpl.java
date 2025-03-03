@@ -7,6 +7,8 @@ import com.app.ecommerce.core.order.utils.OrderStatus;
 import com.app.ecommerce.core.order.utils.OrdersResponse;
 import com.app.ecommerce.core.product.dto.OrderProductResponse;
 import com.app.ecommerce.core.user.User;
+import lombok.RequiredArgsConstructor;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -14,17 +16,14 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+
 @Service
+@RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService{
 
 
     private final OrderRepository orderRepository;
     private final ModelMapper modelMapper;
-
-    public OrderServiceImpl(OrderRepository orderRepository, ModelMapper modelMapper) {
-        this.orderRepository = orderRepository;
-        this.modelMapper = modelMapper;
-    }
 
     @Override
     public OrdersResponse createOrder(User customer){
@@ -42,8 +41,10 @@ public class OrderServiceImpl implements OrderService{
 
     @Override
     public OrdersResponse changeOrderStatus(User customer, Long orderId){
+
         Order order = orderRepository.findByIdAndCustomerAndOrderStatus(orderId, customer,OrderStatus.PENDING).orElseThrow(() ->
                 new SystemServiceException(ExceptionMessages.NOT_ALLOWED));
+
         order.setOrderStatus(OrderStatus.SHIPPED);
         orderRepository.save(order);
         return modelMapper.map(order, OrdersResponse.class);
@@ -62,6 +63,14 @@ public class OrderServiceImpl implements OrderService{
                 .build();
     }
 
+    @Override
+    public List<OrdersResponse> getOrders(User customer){
+        return orderRepository.findAllByCustomer(customer)
+                .stream()
+                .map(order -> modelMapper.map(order, OrdersResponse.class))
+                .toList();
+    }
+
     private List<OrderProductResponse> getOrderResponse(Order order) {
         List<OrderProductResponse> responses = new ArrayList<>();
         if (order.getOrderItems() != null) {
@@ -75,13 +84,5 @@ public class OrderServiceImpl implements OrderService{
             });
         }
         return responses;
-    }
-
-    @Override
-    public List<OrdersResponse> getOrders(User customer){
-        return orderRepository.findAllByCustomer(customer)
-                .stream()
-                .map(order -> modelMapper.map(order, OrdersResponse.class))
-                .toList();
     }
 }
